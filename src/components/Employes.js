@@ -5,7 +5,7 @@ function Employes(props) {
     <>
       <div>Employes {props.name}</div>
 
-      <p>{props.role ? props.role : "No role"}</p>
+      {/* <p>{props.role ? props.role : "No role"}</p> */}
       {props.role ? (
         <p className="role">{props.role}</p>
       ) : (
