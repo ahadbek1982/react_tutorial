@@ -16,10 +16,20 @@ function App() {
               setrole(e.target.value);
             }}
           />
-          <Employes name="Ahadbek" role="Intern" />
-          <Employes name="Rustam" role={role} />
-          <Employes name="Furkat" />
-          <Employes nama="Mumin" />
+          <div className="flex flex-wrap justify-center">
+            <Employes
+              name="Ahadbek"
+              role="Intern"
+              img="https://images.pexels.com/photos/18114933/pexels-photo-18114933.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            />
+            <Employes
+              name="Rustam"
+              role={role}
+              img="https://images.pexels.com/photos/18185492/pexels-photo-18185492.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            />
+            <Employes name="Furkat" />
+            <Employes nama="Mumin" />
+          </div>
         </>
       ) : (
         <p>You can't see the employes</p>
