@@ -3,6 +3,7 @@ import "./App.css";
 import Employes from "./components/Employes";
 import { v4 as uuidv4 } from "uuid";
 import AddEmployee from "./components/AddEmployee";
+import Header from "./components/Headers";
 
 function App() {
   const showEmployes = true;
@@ -56,6 +57,7 @@ function App() {
   }
   return (
     <div className="App">
+      <Header />
       {showEmployes ? (
         <>
           <input
