@@ -7,6 +7,7 @@ import Header from "./components/Headers";
 import Employees from "./pages/Employees";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Customer from "./pages/Customer";
+import Dictionery from "./components/Dictionery";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/employees" element={<Employees />}></Route>
           <Route path="/customer" element={<Customer />}></Route>
+          <Route path="/dictionary" element={<Dictionery />}></Route>
         </Routes>
       </Header>
     </BrowserRouter>
