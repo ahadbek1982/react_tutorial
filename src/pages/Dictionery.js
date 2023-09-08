@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function Dictionery() {
   const [word, setword] = useState();
-  useEffect(() => {
-    console.log("word updated", word);
-  });
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-400 min-h-screen">
       <input
@@ -13,7 +11,13 @@ function Dictionery() {
           setword(e.target.value);
         }}
       />
-      <h3>Let's get the definition for {word}</h3>
+      <button
+        onClick={() => {
+          navigate("/definition/" + word);
+        }}
+      >
+        Search
+      </button>
     </div>
   );
 }
