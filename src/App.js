@@ -6,10 +6,11 @@ import AddEmployee from "./components/AddEmployee";
 import Header from "./components/Headers";
 import Employees from "./pages/Employees";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Customer from "./pages/Customer";
+import Customers from "./pages/Customers";
 import Dictionery from "./pages/Dictionery";
 import Defination from "./pages/Defination";
 import NotFound from "./pages/NotFound";
+import Customer from "./pages/Customer";
 
 function App() {
   return (
@@ -17,9 +18,9 @@ function App() {
       <Header>
         <Routes>
           <Route path="/employees" element={<Employees />}></Route>
-          <Route path="/customer" element={<Customer />}></Route>
+          <Route path="/customers" element={<Customers />}></Route>
           <Route path="/dictionary" element={<Dictionery />}></Route>
-
+          <Route path="/customers/:id" element={<Customer />}></Route>
           <Route path="/definition/:search" element={<Defination />}></Route>
           <Route path="/404" element={<NotFound />}></Route>
           <Route path="*" element={<NotFound />}></Route>
