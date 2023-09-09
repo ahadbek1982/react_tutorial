@@ -5,19 +5,29 @@ function Dictionery() {
   const navigate = useNavigate();
   return (
     <div className="bg-gray-400 min-h-screen">
-      <input
-        type="text"
-        onChange={(e) => {
-          setword(e.target.value);
-        }}
-      />
-      <button
-        onClick={() => {
+      <form
+        className="flex justify-center space-x-2 max-x-[300px] "
+        onSubmit={() => {
           navigate("/definition/" + word);
         }}
       >
-        Search
-      </button>
+        <input
+          className="px-2 py-1 rounded shrink min-w-0"
+          placeholder="Enter noun or verb"
+          type="text"
+          onChange={(e) => {
+            setword(e.target.value);
+          }}
+        />
+        <button
+          onClick={() => {
+            navigate("/definition/" + word);
+          }}
+          className="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-2 rounded"
+        >
+          Search
+        </button>
+      </form>
     </div>
   );
 }

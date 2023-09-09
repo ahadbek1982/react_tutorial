@@ -9,6 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Customer from "./pages/Customer";
 import Dictionery from "./pages/Dictionery";
 import Defination from "./pages/Defination";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
           <Route path="/dictionary" element={<Dictionery />}></Route>
 
           <Route path="/definition/:search" element={<Defination />}></Route>
+          <Route path="/404" element={<NotFound />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Header>
     </BrowserRouter>
