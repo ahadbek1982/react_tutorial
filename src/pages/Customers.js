@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AddCustomer from "../components/AddCustomer";
 import { baseUrl } from "../Shared";
 
 function Customers() {
   const [customers, setcustomers] = useState();
   const [show, setShow] = useState(false);
+  const url = baseUrl + "api/customers/";
+  const navigate = useNavigate();
   useEffect(() => {
-    console.log("Fetching...");
-    fetch("http://127.0.0.1:8000/api/customers/")
-      .then((response) => response.json())
+    fetch(url)
+      .then((response) => {
+        if (response.status === 401) {
+          navigate("/login");
+        }
+        return response.json();
+      })
       .then((data) => {
         setcustomers(data.customers);
         console.log(data);
@@ -47,11 +53,14 @@ function Customers() {
   return (
     <div className="text-danger">
       <h1> Here are our customer:</h1>
-      <ul>
+      <ul className="bg-gray-200 border">
         {customers
           ? customers.map((customer) => {
               return (
-                <li key={customer.id}>
+                <li
+                  key={customer.id}
+                  className="border border-slate-900 my-2 px-2 hover:bg-cyan-600 hover:text-white "
+                >
                   <Link to={"/customers/" + customer.id}>{customer.name}</Link>
                 </li>
               );

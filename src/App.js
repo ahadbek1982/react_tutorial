@@ -11,6 +11,7 @@ import Dictionery from "./pages/Dictionery";
 import Defination from "./pages/Defination";
 import NotFound from "./pages/NotFound";
 import Customer from "./pages/Customer";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/customers/:id" element={<Customer />}></Route>
           <Route path="/definition/:search" element={<Defination />}></Route>
           <Route path="/404" element={<NotFound />}></Route>
+          <Route path="/login" element={<Login />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Header>

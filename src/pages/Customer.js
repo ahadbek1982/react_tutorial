@@ -10,6 +10,8 @@ function Customer() {
   const [tempcustomer, settempcustomer] = useState();
   const navigate = useNavigate();
   const [changed, setchanged] = useState(false);
+  const [error, setError] = useState();
+
   useEffect(() => {
     if (!customer) return;
     if (!customer) return;
@@ -29,9 +31,7 @@ function Customer() {
         navigate("/customers/");
       })
 
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => {});
     // console.log("deleting ...");
   };
 
@@ -42,6 +42,8 @@ function Customer() {
         if (response.status === 404) {
           // navigate("/404");
           setNotFound(true);
+        } else if (response.status === 401) {
+          navigate("/login");
         }
         return response.json();
       })
@@ -50,7 +52,8 @@ function Customer() {
         settempcustomer(data.customer);
       });
   }, []);
-  function updateCustomer() {
+  function updateCustomer(e) {
+    e.preventDefault();
     const url = baseUrl + "api/customers/" + id;
     fetch(url, {
       method: "POST",
@@ -60,13 +63,15 @@ function Customer() {
       body: JSON.stringify(tempcustomer),
     })
       .then((response) => {
+        if (!response.ok) throw new Error("Something went wrong");
         return response.json();
       })
       .then((data) => {
         setchanged(false);
-        console.log(data);
       })
-      .catch();
+      .catch((e) => {
+        setError(e.message);
+      });
   }
 
   // function compareCustomer() {
@@ -83,52 +88,97 @@ function Customer() {
   // }
 
   return (
-    <>
+    <div className="mb-2">
       {notFound ? <p>The customer with id {id} was not found </p> : null}
       {customer ? (
-        <div>
-          {" "}
-          <p class="m-2 block"> ID: {tempcustomer.id}</p>
-          <input
-            class="m-2 block"
-            type="text"
-            value={tempcustomer.name}
-            onChange={(e) => {
-              setchanged(true);
-              settempcustomer({ ...tempcustomer, name: e.target.value });
-            }}
-          />
-          <input
-            class="m-2"
-            type="text"
-            value={tempcustomer.industry}
-            onChange={(e) => {
-              setchanged(true);
-              settempcustomer({ ...tempcustomer, industry: e.target.value });
-            }}
-          />
+        <div className="m-2">
+          <form
+            className="w-full mx-w-sm "
+            id="customer"
+            onSubmit={updateCustomer}
+          >
+            {" "}
+            {/* <p class="m-2 block"> ID: {tempcustomer.id}</p> */}
+            <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/12">
+                <label htmlFor="name">Name: </label>
+              </div>
+              <div className="md:w-3/4">
+                <input
+                  id="name"
+                  className="bg-gray-200 rounded w-[300px] py-2 px-2 border-3 border-slate-50 leading-tight focus:outline-none  focus:bg-slate-50 focus:border-purple-500"
+                  type="text"
+                  value={tempcustomer.name}
+                  onChange={(e) => {
+                    setchanged(true);
+                    settempcustomer({ ...tempcustomer, name: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="md:flex md:items-center mb-4">
+              <div className="md:w-1/12">
+                <label htmlFor="industry">Industry: </label>
+              </div>
+              <div className="md:w-2/4">
+                <input
+                  id="industry"
+                  className="bg-gray-200 rounded w-[300px] py-2 px-2 border-3 border-slate-50 leading-tight focus:outline-none  focus:bg-slate-50 focus:border-purple-500"
+                  type="text"
+                  value={tempcustomer.industry}
+                  onChange={(e) => {
+                    setchanged(true);
+                    settempcustomer({
+                      ...tempcustomer,
+                      industry: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </form>
           <br />
           {changed ? (
             <>
-              <button
-                className="m-2"
-                onClick={(e) => {
-                  settempcustomer({ ...customer });
-                  setchanged(false);
-                }}
-              >
-                Cancel
-              </button>{" "}
-              <button className="m-2" onClick={updateCustomer}>
-                Save
-              </button>
+              <div className="mb-2">
+                <button
+                  form="customer"
+                  className="bg-slate-500 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={(e) => {
+                    settempcustomer({ ...customer });
+                    setchanged(false);
+                  }}
+                >
+                  Cancel
+                </button>{" "}
+                <button
+                  form="customer"
+                  className="bg-purple-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Save
+                </button>
+              </div>
             </>
           ) : null}
+          <div>
+            <button
+              onClick={deleteCustomer}
+              className="bg-slate-400 text-white font-bold py-2 px-4 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>{" "}
+          </div>
+          <br />
+          {error ? <p>{error}</p> : null}
         </div>
       ) : null}
-      <button onClick={deleteCustomer}>Delete</button> <br />
-      <Link to={"/customers/"}>Go to back</Link>
-    </>
+      <Link to={"/customers/"}>
+        {" "}
+        <button className="no-uderline bg-purple-600 text-white  font-bold py-2 px-4 rounded">
+          🢀 Go to back
+        </button>
+      </Link>
+    </div>
   );
 }
 
