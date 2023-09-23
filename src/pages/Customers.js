@@ -1,24 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import AddCustomer from "../components/AddCustomer";
 import { baseUrl } from "../Shared";
+import { LoginContext } from "../App";
 
 function Customers() {
+  const [loggedin, setloggedin] = useContext(LoginContext);
   const [customers, setcustomers] = useState();
   const [show, setShow] = useState(false);
   const url = baseUrl + "api/customers/";
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
         if (response.status === 401) {
-          navigate("/login");
+          setloggedin(false);
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         }
         return response.json();
       })
       .then((data) => {
         setcustomers(data.customers);
-        console.log(data);
+        // console.log(data);
       });
   }, []);
   function toogleShow() {
@@ -32,6 +46,7 @@ function Customers() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
       },
       body: JSON.stringify(data),
     })

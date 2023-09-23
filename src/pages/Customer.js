@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import NotFound from "./NotFound";
 import { baseUrl } from "../Shared";
+import { LoginContext } from "../App";
 
 function Customer() {
   const { id } = useParams();
@@ -11,7 +12,8 @@ function Customer() {
   const navigate = useNavigate();
   const [changed, setchanged] = useState(false);
   const [error, setError] = useState();
-
+  const location = useLocation();
+  const [loggedin, setloggedin] = useContext(LoginContext);
   useEffect(() => {
     if (!customer) return;
     if (!customer) return;
@@ -23,8 +25,22 @@ function Customer() {
 
   const deleteCustomer = () => {
     const url = baseUrl + "api/customers/" + id;
-    fetch(url, { method: "DELETE" })
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
+        if (response.status === 401) {
+          setloggedin(false);
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
         if (!response.ok) {
           throw new Error("Something went wrong!!!..");
         }
@@ -37,13 +53,23 @@ function Customer() {
 
   useEffect(() => {
     const url = baseUrl + "api/customers/" + id;
-    fetch(url)
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
+      },
+    })
       .then((response) => {
         if (response.status === 404) {
           // navigate("/404");
           setNotFound(true);
         } else if (response.status === 401) {
-          navigate("/login");
+          setloggedin(false);
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
         }
         return response.json();
       })
@@ -59,10 +85,19 @@ function Customer() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access"),
       },
       body: JSON.stringify(tempcustomer),
     })
       .then((response) => {
+        if (response.status === 401) {
+          setloggedin(false);
+          navigate("/login", {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
         if (!response.ok) throw new Error("Something went wrong");
         return response.json();
       })

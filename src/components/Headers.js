@@ -1,7 +1,8 @@
-import { Fragment } from "react";
+import { useContext, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { NavLink } from "react-router-dom";
+import { LoginContext } from "../App";
 
 const navigation = [
   { name: "Dashboard", href: "/" },
@@ -16,6 +17,8 @@ function classNames(...classes) {
 }
 
 export default function Header(props) {
+  const [loggedin, setloggedin] = useContext(LoginContext);
+
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -67,6 +70,26 @@ export default function Header(props) {
                           {item.name}
                         </NavLink>
                       ))}
+                      {loggedin ? (
+                        <NavLink
+                          to={"/login"}
+                          onClick={() => {
+                            console.log("logout ....");
+                            setloggedin(false);
+                            localStorage.clear();
+                          }}
+                          className="rounded-md px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-700 hover:text-white"
+                        >
+                          Logout
+                        </NavLink>
+                      ) : (
+                        <NavLink
+                          to={"/login"}
+                          className="rounded-md px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-700 hover:text-white"
+                        >
+                          Login
+                        </NavLink>
+                      )}
                     </div>
                   </div>
                 </div>
